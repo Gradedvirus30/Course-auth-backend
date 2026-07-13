@@ -1,16 +1,6 @@
 """Pydantic request and response schemas."""
 
-from pydantic import BaseModel, ConfigDict, Field
-
-
-class StudentLogin(BaseModel):
-    email: str = Field(..., min_length=1)
-    password: str = Field(..., min_length=1)
-
-
-class AdminLogin(BaseModel):
-    username: str = Field(..., min_length=1)
-    password: str = Field(..., min_length=1)
+from pydantic import BaseModel, ConfigDict
 
 
 class Token(BaseModel):

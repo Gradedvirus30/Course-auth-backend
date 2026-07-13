@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 
 from app.auth import get_current_admin
 from app.database import get_db
-from app.models import Admin, Course
-from app.schemas import CourseCreate, CourseResponse, CourseUpdate
+from app.models import Admin, Course, Student
+from app.schemas import CourseCreate, CourseResponse, CourseUpdate, StudentResponse
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
 
@@ -45,6 +45,19 @@ def get_course(
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
     return course
+
+
+@router.get("/courses/{course_id}/students", response_model=list[StudentResponse])
+def list_course_students(
+    course_id: int,
+    db: Session = Depends(get_db),
+    admin: Admin = Depends(get_current_admin),
+) -> list[Student]:
+    """Return students enrolled in a course."""
+    course = db.get(Course, course_id)
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+    return course.students
 
 
 @router.put("/courses/{course_id}", response_model=CourseResponse)

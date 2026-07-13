@@ -34,3 +34,11 @@ class CourseResponse(BaseModel):
     description: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class StudentResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+
+    model_config = ConfigDict(from_attributes=True)

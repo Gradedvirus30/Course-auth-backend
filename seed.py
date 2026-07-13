@@ -1,37 +1,114 @@
-from sqlalchemy.orm import Session
+"""Seed the database with sample admins, students and courses."""
 
 from app.auth import hash_password
-from app.database import SessionLocal
-from app.models import Admin, Student
+from app.database import Base, SessionLocal, engine
+from app.models import Admin, Course, Enrollment, Student
 
+# Recreate database
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
-def seed_database():
-    db: Session = SessionLocal()
+db = SessionLocal()
 
-    try:
-        # Create default admin
-        if not db.query(Admin).filter(Admin.username == "admin").first():
-            admin = Admin(
-                username="admin",
-                hashed_password=hash_password("admin123"),
-            )
-            db.add(admin)
+# -------------------------
+# Admin
+# -------------------------
 
-        # Create default student
-        if not db.query(Student).filter(Student.email == "student@test.com").first():
-            student = Student(
-                name="Test Student",
-                email="student@test.com",
-                hashed_password=hash_password("student123"),
-            )
-            db.add(student)
+admin = Admin(
+    username="admin",
+    hashed_password=hash_password("admin123"),
+)
 
-        db.commit()
-        print("✅ Seed data added successfully!")
+db.add(admin)
 
-    finally:
-        db.close()
+# -------------------------
+# Students
+# -------------------------
 
+students = [
+    Student(
+        name="Alice Johnson",
+        email="alice@test.com",
+        hashed_password=hash_password("alice123"),
+    ),
+    Student(
+        name="Bob Smith",
+        email="bob@test.com",
+        hashed_password=hash_password("bob123"),
+    ),
+    Student(
+        name="Charlie Brown",
+        email="charlie@test.com",
+        hashed_password=hash_password("charlie123"),
+    ),
+]
 
-if __name__ == "__main__":
-    seed_database()
+db.add_all(students)
+
+# -------------------------
+# Courses
+# -------------------------
+
+courses = [
+    Course(
+        course_name="Artificial Intelligence",
+        description="Introduction to AI concepts and machine learning.",
+    ),
+    Course(
+        course_name="Data Structures",
+        description="Stacks, queues, trees, graphs and algorithms.",
+    ),
+    Course(
+        course_name="Cloud Computing",
+        description="Fundamentals of cloud platforms and deployment.",
+    ),
+    Course(
+        course_name="Database Systems",
+        description="SQL, normalization and database design.",
+    ),
+]
+
+db.add_all(courses)
+
+db.commit()
+
+# Refresh so IDs are available
+for student in students:
+    db.refresh(student)
+
+for course in courses:
+    db.refresh(course)
+
+# -------------------------
+# Enrollments
+# -------------------------
+
+enrollments = [
+    Enrollment(
+        student_id=students[0].id,
+        course_id=courses[0].id,
+    ),
+    Enrollment(
+        student_id=students[0].id,
+        course_id=courses[3].id,
+    ),
+    Enrollment(
+        student_id=students[1].id,
+        course_id=courses[0].id,
+    ),
+    Enrollment(
+        student_id=students[1].id,
+        course_id=courses[2].id,
+    ),
+    Enrollment(
+        student_id=students[2].id,
+        course_id=courses[1].id,
+    ),
+]
+
+db.add_all(enrollments)
+db.commit()
+
+db.close()
+
+print("✅ Database seeded successfully.")

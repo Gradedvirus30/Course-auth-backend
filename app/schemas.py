@@ -29,6 +29,7 @@ class CourseResponse(BaseModel):
 class StudentResponse(BaseModel):
     id: int
     name: str
+    phone: str
     email: str
 
     model_config = ConfigDict(from_attributes=True)

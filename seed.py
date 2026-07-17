@@ -16,6 +16,7 @@ db = SessionLocal()
 
 admin = Admin(
     username="admin",
+    phone="9123456789",
     hashed_password=hash_password("admin123"),
 )
 
@@ -29,16 +30,19 @@ students = [
     Student(
         name="Alice Johnson",
         email="alice@test.com",
+	phone="8956814477",
         hashed_password=hash_password("alice123"),
     ),
     Student(
         name="Bob Smith",
         email="bob@test.com",
+	phone="9740588201",
         hashed_password=hash_password("bob123"),
     ),
     Student(
         name="Charlie Brown",
         email="charlie@test.com",
+	phone="9941230056",
         hashed_password=hash_password("charlie123"),
     ),
 ]

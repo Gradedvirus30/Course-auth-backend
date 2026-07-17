@@ -12,6 +12,7 @@ class Student(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
+    phone = Column(String, nullable=True)
     hashed_password = Column(String, nullable=False)
 
     enrollments = relationship(
@@ -25,6 +26,7 @@ class Admin(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
+    phone = Column(String, nullable=True)
     hashed_password = Column(String, nullable=False)
 
 

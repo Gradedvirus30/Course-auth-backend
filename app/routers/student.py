@@ -7,6 +7,7 @@ from app.auth import get_current_student
 from app.database import get_db
 from app.models import Course, Enrollment, Student
 from app.schemas import CourseResponse, StudentResponse
+from app.encryption import decrypt
 
 router = APIRouter(prefix="/student", tags=["Student"])
 
@@ -16,7 +17,12 @@ def get_profile(
     student: Student = Depends(get_current_student),
 ):
     """Return the authenticated student's profile."""
-    return student
+    return StudentResponse(
+    id=student.id,
+    name=student.name,
+    email=student.email,
+    phone=decrypt(student.phone),
+)
 
 
 @router.get("/courses", response_model=list[CourseResponse])

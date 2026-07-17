@@ -1,8 +1,12 @@
-"""Authentication configuration.
+"""Authentication configuration."""
 
-Replace ``SECRET_KEY`` with a long, randomly generated value before deploying.
-"""
+import os
+from dotenv import load_dotenv
 
-SECRET_KEY = "change-this-to-a-long-random-secret-before-production"
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+AES_KEY = os.getenv("AES_KEY")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30

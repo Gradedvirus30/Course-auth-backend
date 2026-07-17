@@ -12,6 +12,7 @@ from app.auth import (
 from app.database import get_db
 from app.models import Admin, Student
 from app.schemas import Token, StudentCreate
+from app.encryption import encrypt
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -47,7 +48,7 @@ def register_student(
     student = Student(
         name=student_data.name,
         email=student_data.email,
-        phone=student_data.phone,
+        phone=encrypt(student_data.phone),
         hashed_password=hash_password(student_data.password),
     )
 

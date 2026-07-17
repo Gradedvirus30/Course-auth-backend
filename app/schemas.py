@@ -33,3 +33,9 @@ class StudentResponse(BaseModel):
     email: str
 
     model_config = ConfigDict(from_attributes=True)
+
+class StudentCreate(BaseModel):
+    name: str
+    email: str
+    phone: str
+    password: str

@@ -6,9 +6,17 @@ from sqlalchemy.orm import Session
 from app.auth import get_current_student
 from app.database import get_db
 from app.models import Course, Enrollment, Student
-from app.schemas import CourseResponse
+from app.schemas import CourseResponse, StudentResponse
 
 router = APIRouter(prefix="/student", tags=["Student"])
+
+
+@router.get("/profile", response_model=StudentResponse)
+def get_profile(
+    student: Student = Depends(get_current_student),
+):
+    """Return the authenticated student's profile."""
+    return student
 
 
 @router.get("/courses", response_model=list[CourseResponse])
